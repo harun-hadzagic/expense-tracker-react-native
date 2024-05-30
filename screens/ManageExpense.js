@@ -15,15 +15,25 @@ const ManageExpense = ({ route, navigation }) => {
     });
   }, [navigation, isEditing]);
 
-  const deleteExpenseHandler = () => {};
-  const cancleHandler = () => {};
-  const confirmHandler = () => {};
+  const deleteExpenseHandler = () => {
+    navigation.goBack();
+  };
+  const cancleHandler = () => {
+    navigation.goBack();
+  };
+  const confirmHandler = () => {
+    navigation.goBack();
+  };
   return (
     <View style={styles.container}>
-        <View style={styles.buttonContainer}>
-            <Button style={styles.button} mode='flat' onPress={cancleHandler}>Cancle</Button>
-            <Button style={styles.button} onPress={confirmHandler}>{isEditing ? 'Update' : 'Add'}</Button>
-        </View>
+      <View style={styles.buttonContainer}>
+        <Button style={styles.button} mode="flat" onPress={cancleHandler}>
+          Cancle
+        </Button>
+        <Button style={styles.button} onPress={confirmHandler}>
+          {isEditing ? "Update" : "Add"}
+        </Button>
+      </View>
       {isEditing && (
         <View style={styles.deleteContainer}>
           <IconButton
@@ -53,13 +63,13 @@ const styles = StyleSheet.create({
     borderTopColor: GlobalStyles.colors.primary200,
     alignItems: "center",
   },
-  buttonContainer:{
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center'
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
   },
-  button:{
+  button: {
     minWidth: 120,
-    marginHorizontal: 8
-  }
+    marginHorizontal: 8,
+  },
 });
