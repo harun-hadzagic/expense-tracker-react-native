@@ -1,13 +1,17 @@
-import { useEffect, useLayoutEffect } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { useContext, useEffect, useLayoutEffect } from "react";
+import { StyleSheet, Text, TextInput, View } from "react-native";
 import IconButton from "../components/ui/IconButton";
 import { GlobalStyles } from "../constants/styles";
 
 import Button from "../components/ui/Button";
+import { ExpensesContext } from "../store/expenses-context";
+import ExpenseForm from "../components/ManageExpense/ExpenseForm";
 
 const ManageExpense = ({ route, navigation }) => {
   const editedExpenseId = route.params?.expenseId;
   const isEditing = !!editedExpenseId;
+
+  const expenseContext = useContext(ExpensesContext);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -16,16 +20,33 @@ const ManageExpense = ({ route, navigation }) => {
   }, [navigation, isEditing]);
 
   const deleteExpenseHandler = () => {
+    expenseContext.deleteExpense(editedExpenseId);
     navigation.goBack();
   };
   const cancleHandler = () => {
     navigation.goBack();
   };
   const confirmHandler = () => {
+    if (isEditing) {
+      expenseContext.updateExpense(
+        editedExpenseId,
+        {
+        description: "test!!!",
+        amount: 199.99,
+        date: new Date("2022-06-19"),
+      });
+    } else {
+      expenseContext.addExpense({
+        description: "test",
+        amount: 19.99,
+        date: new Date("2022-06-19"),
+      });
+    }
     navigation.goBack();
   };
   return (
     <View style={styles.container}>
+      <ExpenseForm />
       <View style={styles.buttonContainer}>
         <Button style={styles.button} mode="flat" onPress={cancleHandler}>
           Cancle

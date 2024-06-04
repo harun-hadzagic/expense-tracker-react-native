@@ -31,6 +31,12 @@ const DUMMY_EXPENSES = [
     amount: 2.99,
     date: new Date("2022-12-09"),
   },
+  {
+    id: "e6",
+    description: "new phone",
+    amount: 299.99,
+    date: new Date("2024-05-29"),
+  },
 ];
 
 export const ExpensesContext = createContext({
@@ -53,6 +59,7 @@ const expensesReducer = (state, action) => {
       const updatedItem = { ...updatableExpense, ...action.payload.data };
       const updatedExpenses = [...state];
       updatedExpenses[updatatableExpenseIndex] = updatedItem;
+      return updatedExpenses
     case "DELETE":
       return state.filter((expense) => expense.id !== action.payload);
 
@@ -70,9 +77,17 @@ const ExpensesContextProvider = ({ children }) => {
     dispatch({ type: "DELETE", payload: id });
   };
   const updateExpense = (id, expenseData) => {
+    // console.log(id, expenseData)
     dispatch({ type: "UPDATE", payload: { id: id, data: expenseData } });
   };
-  return <ExpensesContext.Provider>{children}</ExpensesContext.Provider>;
+
+  const value = {
+    expenses: expensesState,
+    deleteExpense,
+    updateExpense,
+    addExpense
+  }
+  return <ExpensesContext.Provider value={value}>{children}</ExpensesContext.Provider>;
 };
 
 export default ExpensesContextProvider;
