@@ -3,17 +3,30 @@ import Input from "./Input";
 import { useState } from "react";
 import Button from "../ui/Button";
 import { getFormattedDate } from "../../util/date";
+import { GlobalStyles } from "../../constants/styles";
 
 const ExpenseForm = ({ cancleHandler, isEditing, onSubmit, defaultValues }) => {
   const [inputs, setInputs] = useState({
-    amount: {isValid: true, value: defaultValues ? defaultValues.amount.toString() : ""},
-    date: {isValid: true, value: defaultValues ? getFormattedDate(defaultValues.date) : ""},
-    description: {isValid: true, value: defaultValues ? defaultValues.description : ""},
+    amount: {
+      isValid: true,
+      value: defaultValues ? defaultValues.amount.toString() : "",
+    },
+    date: {
+      isValid: true,
+      value: defaultValues ? getFormattedDate(defaultValues.date) : "",
+    },
+    description: {
+      isValid: true,
+      value: defaultValues ? defaultValues.description : "",
+    },
   });
 
   const inputChangedHandler = (inputIdentifier, enteredValue) => {
     setInputs((currentInputValues) => {
-      return { ...currentInputValues, [inputIdentifier]: {value: enteredValue, isValid: true} };
+      return {
+        ...currentInputValues,
+        [inputIdentifier]: { value: enteredValue, isValid: true },
+      };
     });
   };
 
@@ -29,29 +42,35 @@ const ExpenseForm = ({ cancleHandler, isEditing, onSubmit, defaultValues }) => {
     const descriptionIsValid = expenseData.description.trim().length > 0;
 
     if (!amountIsValid || !dateIsValid || !descriptionIsValid) {
-        // Alert.alert("Invalid input", 'Please ckeck your inputs')
-        
-        setInputs((currentInputs)=>{
-            return {
-                amount: {value: currentInputs.amount.value, isValid: amountIsValid},
-                date: {value: currentInputs.date.value, isValid: dateIsValid},
-                description: {value: currentInputs.description.value, isValid: descriptionIsValid},
-            }
-        })
+      // Alert.alert("Invalid input", 'Please ckeck your inputs')
 
-        return;
+      setInputs((currentInputs) => {
+        return {
+          amount: { value: currentInputs.amount.value, isValid: amountIsValid },
+          date: { value: currentInputs.date.value, isValid: dateIsValid },
+          description: {
+            value: currentInputs.description.value,
+            isValid: descriptionIsValid,
+          },
+        };
+      });
+
+      return;
     }
     onSubmit(expenseData);
-
   };
 
-  const forimIsInvalid = !inputs.amount.isValid || !inputs.date.isValid || !inputs.description.isValid
+  const forimIsInvalid =
+    !inputs.amount.isValid ||
+    !inputs.date.isValid ||
+    !inputs.description.isValid;
 
   return (
     <View style={styles.form}>
       <Text style={styles.title}>Your Expense</Text>
       <View style={styles.inputsRow}>
         <Input
+          invalid={!inputs.amount.isValid}
           style={styles.rowInput}
           label="Amount"
           textInputConfig={{
@@ -63,6 +82,7 @@ const ExpenseForm = ({ cancleHandler, isEditing, onSubmit, defaultValues }) => {
         <Input
           style={styles.rowInput}
           label="Date"
+          invalid={!inputs.date.isValid}
           textInputConfig={{
             placeholder: "YYYY-MM-DD",
             maxLength: 10,
@@ -72,6 +92,7 @@ const ExpenseForm = ({ cancleHandler, isEditing, onSubmit, defaultValues }) => {
         />
       </View>
       <Input
+        invalid={!inputs.description.isValid}
         label="Description"
         textInputConfig={{
           multiline: true,
@@ -79,7 +100,9 @@ const ExpenseForm = ({ cancleHandler, isEditing, onSubmit, defaultValues }) => {
           onChangeText: inputChangedHandler.bind(this, "description"),
         }}
       />
-      {forimIsInvalid && <Text>Please scheck your input</Text>}
+      {forimIsInvalid && (
+        <Text style={styles.errorText}>Please scheck your input</Text>
+      )}
       <View style={styles.buttonContainer}>
         <Button style={styles.button} mode="flat" onPress={cancleHandler}>
           Cancle
@@ -120,5 +143,10 @@ const styles = StyleSheet.create({
   button: {
     minWidth: 120,
     marginHorizontal: 8,
+  },
+  errorText: {
+    textAlign: "center",
+    color: GlobalStyles.colors.error500,
+    margin: 8,
   },
 });
