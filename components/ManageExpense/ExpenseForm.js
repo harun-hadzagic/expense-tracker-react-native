@@ -101,7 +101,7 @@ const ExpenseForm = ({ cancleHandler, isEditing, onSubmit, defaultValues }) => {
         }}
       />
       {forimIsInvalid && (
-        <Text style={styles.errorText}>Please scheck your input</Text>
+        <Text style={styles.errorText}>Please check your input</Text>
       )}
       <View style={styles.buttonContainer}>
         <Button style={styles.button} mode="flat" onPress={cancleHandler}>
