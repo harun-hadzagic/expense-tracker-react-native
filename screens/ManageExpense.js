@@ -5,6 +5,7 @@ import { GlobalStyles } from "../constants/styles";
 
 import { ExpensesContext } from "../store/expenses-context";
 import ExpenseForm from "../components/ManageExpense/ExpenseForm";
+import { storeExpensew } from "../util/http";
 
 const ManageExpense = ({ route, navigation }) => {
   const editedExpenseId = route.params?.expenseId;
@@ -31,6 +32,7 @@ const ManageExpense = ({ route, navigation }) => {
     if (isEditing) {
       expenseContext.updateExpense(editedExpenseId, expenseData);
     } else {
+      storeExpensew(expenseData)
       expenseContext.addExpense(expenseData);
     }
     navigation.goBack();
