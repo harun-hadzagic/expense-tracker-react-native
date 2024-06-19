@@ -3,7 +3,7 @@ import { createContext, useReducer } from "react";
 export const ExpensesContext = createContext({
   expenses: [],
   addExpense: ({ description, amount, date }) => {},
-  setExpenses: (expenses)={},
+  setExpenses: (expenses = {}),
   deleteExpense: ({ id }) => {},
   updateExpense: ({ id, description, amount, date }) => {},
 });
@@ -20,12 +20,12 @@ const expensesReducer = (state, action) => {
       const updatedItem = { ...updatableExpense, ...action.payload.data };
       const updatedExpenses = [...state];
       updatedExpenses[updatatableExpenseIndex] = updatedItem;
-      return updatedExpenses
+      return updatedExpenses;
     case "DELETE":
       return state.filter((expense) => expense.id !== action.payload);
-      case "SET":
-        const inverted = action.payload.reverse();
-        return inverted;
+    case "SET":
+      const inverted = action.payload.reverse();
+      return inverted;
 
     default:
       return state;
@@ -41,22 +41,25 @@ const ExpensesContextProvider = ({ children }) => {
     dispatch({ type: "DELETE", payload: id });
   };
   const updateExpense = (id, expenseData) => {
-    // console.log(id, expenseData)
     dispatch({ type: "UPDATE", payload: { id: id, data: expenseData } });
   };
 
-  const setExpenses = (expenses) =>{
-    dispatch({type: "SET", payload: expenses})
-  }
+  const setExpenses = (expenses) => {
+    dispatch({ type: "SET", payload: expenses });
+  };
 
   const value = {
     expenses: expensesState,
     deleteExpense,
     updateExpense,
     addExpense,
-    setExpenses
-  }
-  return <ExpensesContext.Provider value={value}>{children}</ExpensesContext.Provider>;
+    setExpenses,
+  };
+  return (
+    <ExpensesContext.Provider value={value}>
+      {children}
+    </ExpensesContext.Provider>
+  );
 };
 
 export default ExpensesContextProvider;
